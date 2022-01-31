@@ -5,8 +5,10 @@ import "./EarlyToken.sol";
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-contract PrivateSale is Ownable {
+contract PrivateSale is Ownable, ReentrancyGuard {
     address public investToken;
     address public fundsReceiver;
     EarlyToken public eToken;
@@ -116,7 +118,7 @@ contract PrivateSale is Ownable {
         }
     }
 
-    function invest(uint256 investAmount) public {
+    function invest(uint256 investAmount) public nonReentrant {
         require(block.timestamp >= startTime, "SALE_NOT_STARTED");
         require(saleEnabled, "SALE_NOT_ENABLED");
         require(whitelisted[msg.sender] == true, "NOT_WHITELISTED");
